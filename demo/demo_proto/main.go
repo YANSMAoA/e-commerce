@@ -5,11 +5,14 @@ import (
 	"net"
 	"time"
 
+	"github.com/cloudwego/biz-demo/gomall/demo/demo_proto/biz/dal"
 	"github.com/cloudwego/biz-demo/gomall/demo/demo_proto/conf"
 	"github.com/cloudwego/biz-demo/gomall/demo/demo_proto/kitex_gen/pbapi/echo"
+	"github.com/cloudwego/biz-demo/gomall/demo/demo_proto/middleware"
 	"github.com/cloudwego/kitex/pkg/klog"
 	"github.com/cloudwego/kitex/pkg/rpcinfo"
 	"github.com/cloudwego/kitex/server"
+	"github.com/joho/godotenv"
 	kitexlogrus "github.com/kitex-contrib/obs-opentelemetry/logging/logrus"
 	consul "github.com/kitex-contrib/registry-consul"
 	"go.uber.org/zap/zapcore"
@@ -28,12 +31,19 @@ func main() {
 }
 
 func kitexInit() (opts []server.Option) {
+	err := godotenv.Load()
+	if err != nil {
+		panic(err)
+	}
+	dal.Init()
+	
+	//opts = append(opts, server.WithServiceAddr(addr), server.WithMiddleware(middleware.Middleware))
 	// address
 	addr, err := net.ResolveTCPAddr("tcp", conf.GetConf().Kitex.Address)
 	if err != nil {
 		panic(err)
 	}
-	opts = append(opts, server.WithServiceAddr(addr))
+	opts = append(opts, server.WithServiceAddr(addr), server.WithMiddleware(middleware.Middleware))
 
 	// service info
 	opts = append(opts, server.WithServerBasicInfo(&rpcinfo.EndpointBasicInfo{
