@@ -26,7 +26,7 @@ func Login(ctx context.Context, c *app.RequestContext) {
 		utils.SendErrResponse(ctx, c, consts.StatusOK, err)
 		return
 	}
-	c.Redirect(consts.StatusFound, []byte(redirect))
+	c.Redirect(consts.StatusOK, []byte(redirect))
 }
 
 // Register .
@@ -45,7 +45,7 @@ func Register(ctx context.Context, c *app.RequestContext) {
 		utils.SendErrResponse(ctx, c, consts.StatusOK, err)
 		return
 	}
-	c.Redirect(consts.StatusFound, []byte("/"))
+	c.Redirect(consts.StatusOK, []byte("/"))
 }
 
 // Logout .
@@ -64,5 +64,5 @@ func Logout(ctx context.Context, c *app.RequestContext) {
 		utils.SendErrResponse(ctx, c, consts.StatusOK, err)
 		return
 	}
-	c.Redirect(consts.StatusFound, []byte("/"))
+	c.Redirect(consts.StatusOK, []byte("/"))
 }

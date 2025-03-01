@@ -22,7 +22,7 @@ demo-link-fix: ## demo proto project lint fix
 
 .PHONY: gen-frontend
 gen-frontend: ## gen frontend
-	@cd app/frontend && cwgo server -I ../../idl --type HTTP --service frontend --module github.com/cloudwego/biz-demo/gomall/app/frontend --idl ../../idl/frontend/checkout_page.proto
+	@cd app/frontend && cwgo server -I ../../idl --type HTTP --service frontend --module github.com/cloudwego/biz-demo/gomall/app/frontend --idl ../../idl/frontend/order_page.proto
 
 .PHONY: gen-user
 gen-user: ## gen user service

@@ -9,7 +9,7 @@ replace github.com/cloudwego/biz-demo/gomall/rpc_gen => ../../rpc_gen
 require (
 	github.com/cloudwego/biz-demo/gomall/rpc_gen v0.0.0-20240512092514-6907fd96d3ca
 	github.com/cloudwego/kitex v0.12.3
-	github.com/google/uuid v1.1.2
+	//github.com/google/uuid v1.1.2
 	github.com/kitex-contrib/obs-opentelemetry/logging/logrus v0.0.0-20240515092919-1f776656cb66
 	github.com/kitex-contrib/registry-consul v0.0.0-20240508100819-2905e45155c1
 	github.com/kr/pretty v0.3.1
@@ -22,12 +22,18 @@ require (
 	gorm.io/gorm v1.25.10
 )
 
+require github.com/nats-io/nats.go v1.39.1
+
 require (
 	github.com/bytedance/sonic/loader v0.2.2 // indirect
 	github.com/cloudwego/base64x v0.1.4 // indirect
 	github.com/cloudwego/gopkg v0.1.4 // indirect
 	github.com/cloudwego/iasm v0.2.0 // indirect
 	github.com/cloudwego/runtimex v0.1.1 // indirect
+	github.com/klauspost/compress v1.17.9 // indirect
+	github.com/nats-io/nkeys v0.4.9 // indirect
+	github.com/nats-io/nuid v1.0.1 // indirect
+	golang.org/x/crypto v0.31.0 // indirect
 )
 
 require (
@@ -83,11 +89,11 @@ require (
 	go.uber.org/multierr v1.10.0 // indirect
 	golang.org/x/arch v0.6.0 // indirect
 	golang.org/x/net v0.24.0 // indirect
-	golang.org/x/sync v0.8.0 // indirect
-	golang.org/x/sys v0.19.0 // indirect
-	golang.org/x/text v0.14.0 // indirect
+	golang.org/x/sync v0.10.0 // indirect
+	golang.org/x/sys v0.28.0 // indirect
+	golang.org/x/text v0.21.0 // indirect
 	google.golang.org/genproto v0.0.0-20240227224415-6ceb2ff114de // indirect
 	google.golang.org/genproto/googleapis/rpc v0.0.0-20240401170217-c3f982113cda // indirect
-	google.golang.org/protobuf v1.33.0 // indirect
+	google.golang.org/protobuf v1.33.0
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 )
