@@ -5,10 +5,20 @@ import (
 	"os"
 	"time"
 
+	//"github.com/armon/go-metrics/prometheus"
+	//"github.com/armon/go-metrics/prometheus"
+
 	"github.com/cloudwego/biz-demo/gomall/app/frontend/biz/router"
+	//"github.com/cloudwego/kitex/pkg/klog"
+	prometheus "github.com/hertz-contrib/monitor-prometheus"
+
+	//"github.com/prometheus/client_golang/prometheus"
+	//"github.com/cloudwego/biz-demo/gomall/common/serversuite"
 	"github.com/cloudwego/biz-demo/gomall/app/frontend/conf"
 	"github.com/cloudwego/biz-demo/gomall/app/frontend/infra/rpc"
 	"github.com/cloudwego/biz-demo/gomall/app/frontend/middleware"
+	frontendutils "github.com/cloudwego/biz-demo/gomall/app/frontend/utils"
+	"github.com/cloudwego/biz-demo/gomall/common/mtl"
 	"github.com/cloudwego/hertz/pkg/app"
 	"github.com/cloudwego/hertz/pkg/app/middlewares/server/recovery"
 	"github.com/cloudwego/hertz/pkg/app/server"
@@ -16,6 +26,7 @@ import (
 	"github.com/cloudwego/hertz/pkg/common/utils"
 	"github.com/cloudwego/hertz/pkg/protocol/consts"
 	"github.com/hertz-contrib/cors"
+	//"github.com/cloudwego/kitex/server"
 	"github.com/hertz-contrib/gzip"
 	"github.com/hertz-contrib/logger/accesslog"
 	hertzlogrus "github.com/hertz-contrib/logger/logrus"
@@ -23,18 +34,38 @@ import (
 	"github.com/hertz-contrib/sessions"
 	"github.com/hertz-contrib/sessions/redis"
 	"github.com/joho/godotenv"
+	//"github.com/kitex-contrib/obs-opentelemetry/tracing"
 	"go.uber.org/zap/zapcore"
 	"gopkg.in/natefinch/lumberjack.v2"
 )
 
+var (
+    ServiceName = frontendutils.ServiceName
+    MetricsPort = conf.GetConf().Hertz.MetricsPort
+	RegistryAddr = conf.GetConf().Hertz.RegistryAddr
+)
+
 func main() {
 	_ = godotenv.Load()
+	consul, registryInfo := mtl.InitMetric(ServiceName, MetricsPort, RegistryAddr)
+	p := mtl.InitTracing(ServiceName)
+    defer p.Shutdown(context.Background())
 	// init dal
 	// dal.Init()
+	defer consul.Deregister(&registryInfo)
 	rpc.InitClient()
 	address := conf.GetConf().Hertz.Address
-	h := server.New(server.WithHostPorts(address))
-
+	h := server.New(server.WithHostPorts(address),
+		server.WithTracer(prometheus.NewServerTracer("", "", prometheus.WithDisableServer(true),
+			prometheus.WithRegistry(mtl.Registry),
+		)),
+	)
+	// svr := echo.NewServer(
+    //     new(EchoImpl),
+    //     server.WithSuite(tracing.NewServerSuite()),
+    //     // Please keep the same as provider.WithServiceName
+    //     server.WithServerBasicInfo(&rpcinfo.EndpointBasicInfo{ServiceName: serviceName}),
+    // )	
 	registerMiddleware(h)
 
 	// add a ping route to test
@@ -69,7 +100,7 @@ func registerMiddleware(h *server.Hertz) {
 	if err != nil {
 		panic(err)
 	}
-	h.Use(sessions.New("cloudwego-shop", store))
+	h.Use(sessions.New("ysmmm-shop", store))
 
 	// log
 	logger := hertzlogrus.NewLogger()

@@ -6,6 +6,7 @@ import (
 
 	"github.com/cloudwego/biz-demo/gomall/app/payment/biz/model"
 	"github.com/cloudwego/biz-demo/gomall/app/payment/conf"
+	"gorm.io/plugin/opentelemetry/tracing"
 
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
@@ -24,6 +25,9 @@ func Init() {
 			SkipDefaultTransaction: true,
 		},
 	)
+	if err := DB.Use(tracing.NewPlugin(tracing.WithoutMetrics())); err != nil {
+        panic(err)
+    }
 	DB.AutoMigrate(&model.PaymentLog{})
 	if err != nil {
 		panic(err)

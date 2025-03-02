@@ -4,6 +4,7 @@ import (
 	"sync"
 
 	"github.com/cloudwego/biz-demo/gomall/app/checkout/conf"
+	"github.com/cloudwego/biz-demo/gomall/common/clientsuite"
 	"github.com/cloudwego/biz-demo/gomall/rpc_gen/kitex_gen/cart/cartservice"
 	"github.com/cloudwego/biz-demo/gomall/rpc_gen/kitex_gen/order/orderservice"
 	"github.com/cloudwego/biz-demo/gomall/rpc_gen/kitex_gen/payment/paymentservice"
@@ -12,7 +13,6 @@ import (
 	"github.com/cloudwego/kitex/pkg/rpcinfo"
 	"github.com/cloudwego/kitex/pkg/transmeta"
 	"github.com/cloudwego/kitex/transport"
-	consul "github.com/kitex-contrib/registry-consul"
 )
 
 var (
@@ -21,6 +21,9 @@ var (
 	PaymentClient paymentservice.Client
 	OrderClient   orderservice.Client
 	once          sync.Once
+	ServiceName = conf.GetConf().Kitex.Service
+    RegistryAddr = conf.GetConf().Registry.RegistryAddress[0]
+    err error
 	//err           error
 )
 
@@ -34,13 +37,13 @@ func InitClient() {
 }
 
 func initCartClient() {
-	var opts []client.Option
-	r, err := consul.NewConsulResolver(conf.GetConf().Registry.RegistryAddress[0])
-	if err != nil {
-		panic(err)
-	}
-
-	opts = append(opts, client.WithResolver(r))
+	opts := []client.Option {
+		
+        client.WithSuite(clientsuite.CommonGrpcClientSuite{
+            CurrentServiceName: ServiceName,
+            RegistryAddr: RegistryAddr,
+        }),
+    }
 	opts = append(opts,
 		client.WithClientBasicInfo(&rpcinfo.EndpointBasicInfo{ServiceName: conf.GetConf().Kitex.Service}),
 		client.WithTransportProtocol(transport.GRPC),
@@ -53,13 +56,13 @@ func initCartClient() {
 }
 
 func initProductClient() {
-	var opts []client.Option
-	r, err := consul.NewConsulResolver(conf.GetConf().Registry.RegistryAddress[0])
-	if err != nil {
-		panic(err)
-	}
-
-	opts = append(opts, client.WithResolver(r))
+	opts := []client.Option {
+		
+        client.WithSuite(clientsuite.CommonGrpcClientSuite{
+            CurrentServiceName: ServiceName,
+            RegistryAddr: RegistryAddr,
+        }),
+    }
 	opts = append(opts,
 		client.WithClientBasicInfo(&rpcinfo.EndpointBasicInfo{ServiceName: conf.GetConf().Kitex.Service}),
 		client.WithTransportProtocol(transport.GRPC),
@@ -72,13 +75,13 @@ func initProductClient() {
 }
 
 func initPaymentClient() {
-	var opts []client.Option
-	r, err := consul.NewConsulResolver(conf.GetConf().Registry.RegistryAddress[0])
-	if err != nil {
-		panic(err)
-	}
-
-	opts = append(opts, client.WithResolver(r))
+	opts := []client.Option {
+		
+        client.WithSuite(clientsuite.CommonGrpcClientSuite{
+            CurrentServiceName: ServiceName,
+            RegistryAddr: RegistryAddr,
+        }),
+    }
 	opts = append(opts,
 		client.WithClientBasicInfo(&rpcinfo.EndpointBasicInfo{ServiceName: conf.GetConf().Kitex.Service}),
 		client.WithTransportProtocol(transport.GRPC),
@@ -91,13 +94,13 @@ func initPaymentClient() {
 }
 
 func initOrderClient() {
-	var opts []client.Option
-	r, err := consul.NewConsulResolver(conf.GetConf().Registry.RegistryAddress[0])
-	if err != nil {
-		panic(err)
-	}
-
-	opts = append(opts, client.WithResolver(r))
+	opts := []client.Option {
+		
+        client.WithSuite(clientsuite.CommonGrpcClientSuite{
+            CurrentServiceName: ServiceName,
+            RegistryAddr: RegistryAddr,
+        }),
+    }
 	opts = append(opts,
 		client.WithClientBasicInfo(&rpcinfo.EndpointBasicInfo{ServiceName: conf.GetConf().Kitex.Service}),
 		client.WithTransportProtocol(transport.GRPC),

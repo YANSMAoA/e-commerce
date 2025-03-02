@@ -6,6 +6,7 @@ import (
 
 	"github.com/cloudwego/biz-demo/gomall/app/product/biz/model"
 	"github.com/cloudwego/biz-demo/gomall/app/product/conf"
+	"gorm.io/plugin/opentelemetry/tracing"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 )
@@ -26,6 +27,9 @@ func Init() {
 	if err != nil {
 		panic(err)
 	}
+	if err := DB.Use(tracing.NewPlugin(tracing.WithoutMetrics())); err != nil {
+        panic(err)
+    }
 	if os.Getenv("GO_ENV") != "online" {
 		needDemoData := !DB.Migrator().HasTable(&model.Product{})
 		DB.AutoMigrate( //nolint:errcheck
