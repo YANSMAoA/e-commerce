@@ -13,6 +13,7 @@ require (
 	github.com/cloudwego/biz-demo/gomall/rpc_gen v0.0.0-00010101000000-000000000000
 	github.com/cloudwego/hertz v0.9.6
 	github.com/cloudwego/kitex v0.12.3
+	github.com/golang-jwt/jwt/v5 v5.2.1
 	github.com/hertz-contrib/cors v0.1.0
 	github.com/hertz-contrib/gzip v0.0.3
 	github.com/hertz-contrib/logger/accesslog v0.0.0-20240128134225-6b18af47a115
